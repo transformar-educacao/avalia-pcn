@@ -1,0 +1,13 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+h2 { color: #333; }
+input, button { margin: 10px 0; padding: 10px; }
+#matriz { border-collapse: collapse; width: 100%; margin-top: 20px; }
+#matriz th, #matriz td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+#matriz th { background-color: #f4f4f4; }
+#loading { display: none; font-size: 18px; color: #555; margin-top: 10px; }
+#textoprompt {width: 500px; height: 200px; overflow-y: scroll; margin: 0; display: block;}
+.imprimirBtn { display: block; 
+margin: 0 auto} 
+#botaoImprimir { display: none; }
+
+

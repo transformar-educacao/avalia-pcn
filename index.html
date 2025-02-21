@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Planos de Curso</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.worker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <link rel="icon" type="image/png" href="assets/criatividade.png">
+    <script src="script.js"></script>
+    <style>
+        .custom-textarea {
+            width: 1249px;
+            height: 621px;
+            resize: none;
+            overflow-y: auto;
+        }
+        
+        @media (max-width: 992px) {
+            .custom-textarea {
+                width: 100%;
+                height: 421px;
+            }
+        }
+        
+        .loading-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .resultado-container {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .botaoImprimir{
+            display: none;
+        }
+       
+        #resultado {
+            display: block !important;
+        }
+        .exibe {
+            display: block !important;
+        }
+
+        .form-control[type="file"] {
+            color: #000000;
+        }
+    
+        .form-control[type="file"]::-webkit-file-upload-button {
+            color: #ffffff;
+            background-color: #f83c7e !important;
+            border-color: #f83c7e !important;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            margin: -0.375rem -0.75rem;
+            margin-right: 0.75rem;
+            border-radius: 0.25rem 0 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        .form-control[type="file"]::-webkit-file-upload-button:hover {
+            background-color: #d40f54 !important;
+            border-color: #d40f54 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(248, 60, 126, 0.2);
+        }
+    
+        .form-control[type="file"]::-webkit-file-upload-button:active {
+            transform: translateY(0);
+            background-color: #b50d47 !important;
+            border-color: #b50d47 !important;
+        }
+
+        .bounce-top {
+            animation: bounce-top 5s infinite alternate both;
+        }
+
+        .btn-primary {
+            background-color: #324295 !important;
+            border-color: #324295 !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #253275 !important;
+            border-color: #253275 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(50, 66, 149, 0.2);
+        }
+
+        .btn-primary:focus {
+            box-shadow: 0 0 0 0.25rem rgba(50, 66, 149, 0.25) !important;
+        }
+
+        .btn-primary:active {
+            background-color: #1c2557 !important;
+            border-color: #1c2557 !important;
+            transform: translateY(0);
+        }
+
+        @keyframes bounce-top {
+            0% {
+                transform: translateY(-45px);
+                animation-timing-function: ease-in;
+                opacity: 1;
+            }
+            24% {
+                opacity: 1;
+            }
+            40% {
+                transform: translateY(-24px);
+                animation-timing-function: ease-in;
+            }
+            65% {
+                transform: translateY(-12px);
+                animation-timing-function: ease-in;
+            }
+            82% {
+                transform: translateY(-6px);
+                animation-timing-function: ease-in;
+            }
+            93% {
+                transform: translateY(-4px);
+                animation-timing-function: ease-in;
+            }
+            25%,
+            55%,
+            75%,
+            87% {
+                transform: translateY(0px);
+                animation-timing-function: ease-out;
+            }
+            100% {
+                transform: translateY(0px);
+                animation-timing-function: ease-out;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <header class="p-3 text-white" style="background-color: #324295;">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <div class="me-auto" style="margin-left: -17.5rem;">
+                    <a href="/" class="d-flex align-items-center text-white text-decoration-none">
+                        <img src="assets/senac.png" alt="logo-senac">
+                    </a>
+                </div>
+                <div class="me-auto" style="margin-left: -17.5rem;">
+                    <h1 class="display-6 mb-0" style="margin-left: 27rem;">Avaliação de Plano de Curso com Inteligência Artificial (v1)</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h2 class="card-title h4 mb-3">Documentos Base</h2>
+                            <ul>
+                                <li>MetodologiasCubos.pdf</li>
+                                <li>impactodaAutomacao.pdf</li>
+                                <li>guia_pratica_docente_MPS.pdf</li>
+                                <li>Guia_Elaboracao_PCs_fev_2023.pdf</li>
+                                <li>Diretrizes-MPS-2024.pdf</li>
+                                <li>DocTec3_Planejamento_2022.pdf</li>
+                            </ul>
+                            <h2 class="card-title h4 mb-3">Documentos Carregados</h2>
+                            <ul id="documentosCarregados"></ul>
+                            <div class="mb-3 d-flex align-items-center gap-2">
+                                <input type="file" class="form-control form-control-sm flex-grow-1" id="uploadPDF" accept=".pdf" multiple>
+                                <button class="btn btn-primary" onclick="adicionarPDF()">Adicionar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h2 class="card-title h4 mb-3 row d-flex justify-content-center">Carregar Plano de Curso</h2>
+                            <p class="text-center text-muted">Faça o upload do seu Plano de Curso, no formato PDF, para submetê-lo à análise:</p>
+                            <input type="file" class="form-control mb-3" id="planoCurso" accept=".pdf">
+                            <div class="mb-3" style="display: block !important;">
+                                <div class="text-center mb-2">
+                                    <label for="textoprompt" class="form-label h4 mb-3">Prompt</label>
+                                    <p class="text-muted">Logo abaixo você encontra o prompt que pautará a análise do seu Plano de Curso, modifique conforme sua necessidade:</p>
+                                </div>
+                                <textarea id="textoprompt" class="form-control custom-textarea exibe">Analise o seguinte Plano de Curso e faça recomendações considerando o perfil atualizado do profissional e as diretrizes do Guia de Elaboração de Planos de Curso (fev/2023).
+
+Formato do Relatório
+Cabeçalho:
+
+Nome do curso
+Carga horária
+Eixo tecnológico
+Segmento
+Ano de criação/revisão
+Tabela de Impacto por Unidade Curricular (UC)
+
+Estruturar em tabela html com cada UC listada horizontalmente na perspectiva temporal.
+No eixo vertical, considerar a classe de impacto com as seguintes categorias:
+Geração (Imediato - até 1 ano)
+Substituição (Curto prazo - entre 1 e 2 anos)
+Transferência (Médio prazo - entre 3 e 5 anos)
+Ampliação (Longo prazo - mais de 5 anos)
+Nenhum impacto
+Proposta de Reestruturação da Carga Horária (se aplicável)
+unidades curriculares devem ter a carga horária múltiplo de 12
+Para cursos de Qualificação Profissional (mínimo 160h), reorganizar e tentar reduzir a carga horária total ficar mais próximo do mínimo.
+Criar uma tabela comparativa com:
+Carga horária original
+Nova carga horária proposta
+Detalhamento das Mudanças Sugeridas
+
+Para cada UC que sofrer alteração, apresentar:
+1 Novo nome (se necessário)
+2 Nova carga horária
+3 Indicadores
+4 Elementos de Competência:
+4.1 Conhecimentos
+4.2 Habilidades
+4.3 Atitudes/Valores
+5 Justificativa da mudança
+6 Análise Geral e Recomendações
+
+Atualizações necessárias considerando tendências do mercado e impacto da automação no contexto brasileiro.
+Com as Referências e listar os documentos utilizados e explicar como cada documento foi usado na análise.</textarea>
+                            </div>
+                            <button class="btn btn-primary" style="background-color: #324295;" onclick="processarPlanoCurso()">Analisar Plano</button>
+                        </div>
+                    </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title h4 mb-3">Resultado da análise:</h2>
+                            <div id="loading" class="loading-container bounce-top" style="display: none;">
+                                <img src="assets/load.gif" class="img-fluid rounded-circle" style="max-width: 20%;">
+                                <p class="mt-3">Processando... Aguarde.</p>
+                            </div>
+                            <div id="resultado" class="resultado-container">Nenhuma análise realizada ainda.</div>
+                            <button id="exportarBtn" class="btn btn-success mt-3" onclick="exportarPDF()" style="display: none;">
+                                Exportar Relatório
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <div class="d-flex justify-content-center mt-n5">
+            <button class="btn btn-primary invisible" id="imprimirBtn" onclick="btnImprimir()">Imprimir Relatório</button>
+        </div>
+    </div>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
